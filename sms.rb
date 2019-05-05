@@ -4,11 +4,11 @@ require 'nexmo'
 class Nexmo_ #Nexmo add _ to not clash with nexmo gem
 
   def initialize
-    @sms_to = "12038100436"
-    @sms_from = "12019321351"
+    @sms_to = ""
+    @sms_from = ""
     @client = Nexmo::Client.new(
-      api_key: "b92104c3",
-      api_secret: "wYu0Nce3mFr6JC8Y"
+      api_key: "",
+      api_secret: ""
     )
   end
 

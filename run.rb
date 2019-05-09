@@ -11,6 +11,7 @@ minutes = io.freq
 $threads = Array.new
 $trade_executed = false
 $thread_failed = false
+$trend = 0
 money = Make_Money.new(coin)
 
 def start_threads(minutes, percent, coin, money)
@@ -32,35 +33,28 @@ end
 start_threads(minutes, percent, coin, money)
 
 while true
-  
-  if $trade_executed != false or $thread_failed !=false then 
-    
+
+  if $trade_executed != false or $thread_failed !=false then
+
     money = nil
     $threads.each do |thr|
       thr.join
     end
     $threads = nil
-    $threads = Array.new 
+    $threads = Array.new
     $trade_executed = false
     $thread_failed = false
     money = Make_Money.new(coin)
     start_threads(minutes, percent, coin, money)
-  
-  else 
+
+  else
 
     $threads.each do |thr|
       if thr.status == nil or thr.status == false or thr.status == "aborting" then
         $thread_failed = true
-      end    
+      end
     end
 
-  end    
+  end
 
 end
-
-
-
-  
-
-
-

@@ -129,6 +129,8 @@ class Make_Money
     newPrice = get_spot_price
     price_change = (1 - oldPrice.to_f / newPrice.to_f) * 100
     price_change_round = price_change.round(5)
+    if $trend >= 3 then change = (change + 0.3) end
+    if $trend <= -3 then change = (change + 0.3) end 
     if price_change > change
       post("buy", minutes, price_change_round)
     elsif price_change < -change

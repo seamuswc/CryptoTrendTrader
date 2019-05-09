@@ -4,8 +4,10 @@
 
 Links into the `Coinbase Pro` exchange and places trades based on the user input that is asked when the program is run.
 
-What *Crypto* to trade. Trades in inputed crypto and *USD*
-Place trade on what *percent change*
+What **Crypto** to trade. Trades in inputed crypto and **USD**
+
+Place trades on what **Percent Change**
+
 What time frames do you want to be used as time comparison. (In minutes)
 
 

@@ -129,11 +129,13 @@ class Make_Money
     newPrice = get_spot_price
     price_change = (1 - oldPrice.to_f / newPrice.to_f) * 100
     price_change_round = price_change.round(5)
-    if $trend >= 3 then change = (change + 0.3) end
-    if $trend <= -3 then change = (change + 0.3) end 
-    if price_change > change
+
+    this_change = change
+    if $trend <= -3 or $trend >= 3 then this_change = (change + 0.3) end
+
+    if price_change > this_change
       post("buy", minutes, price_change_round)
-    elsif price_change < -change
+    elsif price_change < -this_change
       post("sell", minutes, price_change_round)
     else
       if $trade_executed != false then exit end
@@ -194,12 +196,15 @@ class Make_Money
         end
   end
 
-  def trade_executed(minutes, text)
-
+  def trade_executed(minutes, text, order)
       append(text)
       Nexmo_.new.sms_trade #add the _ to not clash with nexmo class
       $trade_executed = minutes
-
+      if order == "buy" then
+        $trend += 1 unless $trend >= 3
+      elsif order == "sell" then
+        $trend -= 1 unless $trend <= -3
+      end
   end
 
  end #class END

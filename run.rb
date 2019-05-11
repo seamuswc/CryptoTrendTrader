@@ -26,7 +26,7 @@ def start_threads(minutes, percent, coin, money)
   puts "Runninng..."
   puts
 
-  Nexmo_.new.sms_start #add the _ to not clash with nexmo class
+  #Nexmo_.new.sms_start #add the _ to not clash with nexmo class
 
 end
 

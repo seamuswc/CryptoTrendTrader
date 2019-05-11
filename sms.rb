@@ -13,12 +13,12 @@ class Nexmo_ #Nexmo add _ to not clash with nexmo gem
   end
 
 
-  def sms_trade
+  def sms_trade(text)
 
     @client.sms.send(
       from: @sms_from,
       to: @sms_to,
-      text: 'A trade was made. RubyCoin'
+      text: text
     )
 
   end

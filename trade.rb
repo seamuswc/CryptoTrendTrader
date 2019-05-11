@@ -5,6 +5,8 @@ require 'json'
 require 'net/http'
 require 'uri'
 require 'thread'
+require 'date'
+
 
 
 class Make_Money
@@ -57,21 +59,23 @@ class Make_Money
   @lock.synchronize {
     if $trade_executed != false then exit end
 
-    apple = get_time_text
-    if order == "buy"
-      text = "Bought: #{minutes} minute ___ #{price_change}% ___ @#{apple}"
-    elsif order == "sell"
-      text = "Sold: #{minutes} minute ___ #{price_change}%  ___ @#{apple}"
-    end
-
-    trade_executed(minutes, text)
-
     asset, type = nil
     (order == "sell") ? asset = @crypto : asset = @fiat
-    (order == "sell") ? type = :crypto : type = :fiat
-
+    (order == "sell") ? type = :crypto : type = :fiat 
+    
     amount = get_amount_available(asset, type)
 
+
+    apple = DateTime.parse(get_time_text).strftime("%m/%d at %I:%M%p")  
+    if order == "buy"
+      text = "Bought: #{minutes} minute ___ #{price_change}% ___ @#{apple} ___ #{amount}"
+    elsif order == "sell"
+      text = "Sold: #{minutes} minute ___ #{price_change}%  ___ @#{apple} ___ #{amount}"
+    end
+      
+    trade_executed(minutes, text, order) unless amount == nil
+
+    
     req_data = {
         "product_id"=>@product_id,
         "side" => order,
@@ -139,7 +143,7 @@ class Make_Money
       post("sell", minutes, price_change_round)
     else
       if $trade_executed != false then exit end
-      text = "For #{minutes} minute interval there was no trade & Price Change was #{price_change_round}%"
+      text = "#{minutes} minute : no trade : Price Change  #{price_change_round}%"
       p text
       check_change(minutes, change)
     end
@@ -198,7 +202,7 @@ class Make_Money
 
   def trade_executed(minutes, text, order)
       append(text)
-      Nexmo_.new.sms_trade #add the _ to not clash with nexmo class
+      Nexmo_.new.sms_trade(text) #add the _ to not clash with nexmo class
       $trade_executed = minutes
       if order == "buy" then
         $trend += 1 unless $trend >= 3
